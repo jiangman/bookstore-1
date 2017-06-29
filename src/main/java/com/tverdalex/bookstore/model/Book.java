@@ -1,8 +1,7 @@
 package com.tverdalex.bookstore.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 public class Book {
@@ -12,11 +11,22 @@ public class Book {
     private String title;
     private String description;
     private Double price;
+    @OneToMany
+    private Collection<Genre> genres;
+    @ManyToMany
+    private Collection<Author> authors;
+
+    public Book() {
+    }
 
     public Book(String title, String description, Double price) {
         this.title = title;
         this.description = description;
         this.price = price;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getTitle() {
