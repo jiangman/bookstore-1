@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+	function arrToStr(array){
+		var str = "<ul>";
+		$.each(array, function(key, value){
+			str += "<li>" + value.name + "</li>";
+		});
+		str += "</ul>";
+		return str;
+	}
+
+	function delBookById(id){
+		alert("Delete book?")
+		$.ajax({
+			url: "http://localhost:8080/books/" + id,
+			method: "POST"
+		}).then(function(){
+			location.reload();
+		});
+	}
+	</script>
+	
+	<title>Admin Page</title>
+</head>
+<body>
+<script type="text/javascript">
+	window.onload = function(){
+		$.ajax({
+			url: "http://localhost:8080/books"			
+		}).then(function(data){
+			$.each(data, function(key, value){
+				$("tbody").append(
+					"<tr id='" + value.id + "'><td>" + value.title + "</td>" +
+						"<td>" + value.description + "</td>" +
+						"<td>" + arrToStr(value.author) + "</td>" +
+						"<td>" + arrToStr(value.genre) + "</td>" +
+						"<td>" + value.price + "</td>" +
+						"<td>" +
+							"<button type='button' class='btn btn-link'>Edit</button>" +
+							"<button type='button' class='btn btn-link' onclick='delBookById(" + value.id + ")'>Delete</button>" +
+						"</td></tr>"
+				);
+			});
+		});
+	}
+</script>
+
+
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Admin Page</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container" style="margin-top:100px">
+	<div class="row">
+		<div class="col-sm-6">
+			<a href="addBook.html">Add new book</a>
+		</div>
+	</div>	
+	<table class='table table-hover'>
+		<thead>
+			<tr>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Author</th>
+				<th>Genge</th>
+				<th>Price</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>			
+		</tbody>
+	</table>
+</div>
+
+</body>
+</html>
