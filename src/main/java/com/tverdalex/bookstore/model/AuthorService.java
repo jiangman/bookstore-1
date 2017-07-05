@@ -20,6 +20,10 @@ public class AuthorService {
         return authorRepository.findAllByOrderByName();
     }
 
+    public Author getById(Long id){
+        return authorRepository.findOne(id);
+    }
+
     public Author add(Author author){
         return authorRepository.save(author);
     }

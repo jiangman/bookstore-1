@@ -24,9 +24,14 @@ public class GenreController {
         return genreService.getAll();
     }
 
+    @GetMapping("/{id}")
+    Genre getById(@PathVariable Long id){
+        return genreService.getById(id);
+    }
+
     @PostMapping
     ResponseEntity<?> addGenre(@RequestBody Genre genre){
-        Genre result = genreService.add(new Genre(genre.getName()));
+        Genre result = genreService.add(genre);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/genres/{id}").buildAndExpand(result.getId()).toUri();
         return ResponseEntity.created(location).build();
     }

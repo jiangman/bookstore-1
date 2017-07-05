@@ -26,9 +26,14 @@ public class AuthorController {
         return authorService.getAll();
     }
 
+    @GetMapping("/{id}")
+    Author getById(@PathVariable Long id){
+        return authorService.getById(id);
+    }
+
     @PostMapping
     ResponseEntity<?> addAuthor(@RequestBody Author author){
-        Author result = authorService.add(new Author(author.getName()));
+        Author result = authorService.add(author);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/authors/{id}").buildAndExpand(result.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
