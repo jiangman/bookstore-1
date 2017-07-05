@@ -11,7 +11,6 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/authors")
 public class AuthorController {
     private final AuthorService authorService;

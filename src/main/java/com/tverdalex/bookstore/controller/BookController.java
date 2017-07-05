@@ -15,7 +15,6 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/books")
 public class BookController{
     private final BookService bookService;

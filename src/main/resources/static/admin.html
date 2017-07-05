@@ -29,7 +29,7 @@
 		alert("Delete book?")
 		$.ajax({
 			url: "http://localhost:8080/books/" + id,
-			method: "POST"
+			method: "DELETE"
 		}).then(function(){
 			location.reload();
 		});
