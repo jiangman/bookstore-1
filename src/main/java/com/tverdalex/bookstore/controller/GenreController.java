@@ -10,6 +10,7 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/genres")
 public class GenreController {
     private final GenreService genreService;
