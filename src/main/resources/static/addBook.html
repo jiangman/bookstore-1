@@ -42,13 +42,13 @@
 			<label for="author">Author(s):</label>
 			<div class="row">
 				<div class="col-sm-6">
-					<select multiple name="authors" class="form-control" id="authors"></select>
+					<select multiple name="author" class="form-control" id="author"></select>
 				    <script type="text/javascript">
 				    	$.ajax({
 							url: "http://localhost:8080/authors"			
 						}).then(function(data){
 							$.each(data, function(key, value){
-								$("#authors").append(
+								$("#author").append(
 									"<option value='" + value.id + "'>" + value.name + "</option>"
 								);
 							});
@@ -69,13 +69,13 @@
 			<label for="author">Genge(s):</label>
 			<div class="row">
 				<div class="col-sm-6">
-					<select multiple name="genres" class="form-control" id="genres"></select>
+					<select multiple name="genre" class="form-control" id="genre"></select>
 				    <script type="text/javascript">
 				    	$.ajax({
 							url: "http://localhost:8080/genres"			
 						}).then(function(data){
 							$.each(data, function(key, value){
-								$("#genres").append(
+								$("#genre").append(
 									"<option value='" + value.id + "'>" + value.name + "</option>"
 								);
 							});
@@ -109,26 +109,26 @@
 		console.log(array);
 
 		var book = {};
-		var authors = [];
-		var genres = [];
+		var author = [];
+		var genre = [];
 		$.each(array, function(){
-			if(this.name == 'authors'){
-				var author = {};
-				author.id = this.value;
-				authors.push(author);
-			} else if (this.name == 'genres') {
-				var genre = {};
-				genre.id = this.value;
-				genres.push(genre);
+			if(this.name == 'author'){
+				var item = {};
+				item.id = this.value;
+				author.push(item);
+			} else if (this.name == 'genre') {
+				var item = {};
+				item.id = this.value;
+				genre.push(item);
 			} else{
 				book[this.name] = this.value;
 			}			
 		});
-		if(authors.length > 0){
-			book.authors = authors;
+		if(author.length > 0){
+			book.author = author;
 		}
-		if (genres.length > 0){
-			book.genres = genres;
+		if (genre.length > 0){
+			book.genre = genre;
 		};
 		book = JSON.stringify(book);
 		console.log(book);
@@ -139,7 +139,7 @@
 			data: book,
 			contentType: "application/json"
 		}).then(function(data){
-			location.replace("admin.html");
+			//location.replace("admin.html");
 		});
 	});
 
