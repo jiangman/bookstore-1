@@ -57,9 +57,9 @@
 				</div>
 				<div class="col-sm-6">
 					<div class="input-group">
-						<input type="text" class="form-control" id="newAuthorName">
+						<input type="text" class="form-control">
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" onclick='addAuthor()'>Add Author</button>
+							<button class="btn btn-default" type="button">Add Author</button>
 						</span>
 					</div>				
 				</div>				
@@ -85,9 +85,9 @@
 				</div>
 				<div class="col-sm-6">
 					<div class="input-group">
-						<input type="text" class="form-control" id="newGenreName">
+						<input type="text" class="form-control">
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" onclick='addGenre()'>Add Genre</button>
+							<button class="btn btn-default" type="button">Add Genre</button>
 						</span>
 					</div>				
 				</div>				
@@ -142,36 +142,6 @@
 			location.replace("admin.html");
 		});
 	});
-
-	function addAuthor(){
-		var author = {};
-		author.name = $("#newAuthorName").val();
-		author = JSON.stringify(author);
-		console.log(author);
-		$.ajax({
-			url: "http://localhost:8080/authors/",
-			method: "POST",
-			data: author,
-			contentType: "application/json"
-		}).then(function(){
-			location.reload();
-		});
-	}
-
-	function addGenre(){
-		var genre = {};
-		genre.name = $("#newGenreName").val();
-		genre = JSON.stringify(genre);
-		console.log(genre);
-		$.ajax({
-			url: "http://localhost:8080/genres/",
-			method: "POST",
-			data: genre,
-			contentType: "application/json"
-		}).then(function(){
-			location.reload();
-		});
-	}
 </script>
 </body>
 </html>
