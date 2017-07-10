@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
@@ -30,7 +31,7 @@ public class GenreController {
     }
 
     @PostMapping
-    ResponseEntity<?> addGenre(@RequestBody Genre genre){
+    ResponseEntity<?> addGenre(@Valid @RequestBody Genre genre){
         Genre result = genreService.add(genre);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/genres/{id}").buildAndExpand(result.getId()).toUri();
         return ResponseEntity.created(location).build();

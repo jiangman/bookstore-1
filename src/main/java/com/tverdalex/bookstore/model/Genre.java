@@ -1,12 +1,13 @@
 package com.tverdalex.bookstore.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
 public class Genre {
-
     private Long id;
+    @NotNull
     private String name;
 
     @ManyToMany

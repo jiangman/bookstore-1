@@ -1,15 +1,25 @@
 package com.tverdalex.bookstore.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
 public class Book {
     private Long id;
+    @NotNull
+    @Size(min = 2, max = 200)
     private String title;
     private String description;
-    private Double price;
+    @NotNull
+    @Digits(integer = 6, fraction = 2)
+    private BigDecimal price;
+    @Size(min = 1)
     private Set<Author> author;
+    @Size(min = 1)
     private Set<Genre> genre;
 
     public Book() {
@@ -41,11 +51,11 @@ public class Book {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

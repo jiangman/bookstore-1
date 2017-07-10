@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
@@ -33,17 +35,24 @@ public class BookController{
     }
 
     @GetMapping("/{id}")
-    Book getById(@PathVariable Long id){
-        Book book = bookService.getById(id);
-        logger.info(book.toString());
-        return book;
+    ResponseEntity<?> getById(@PathVariable Long id){
+        if(bookService.exists(id)){
+            Book book = bookService.getById(id);
+            return new ResponseEntity(book, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping
-    ResponseEntity<?> addBook(@RequestBody Book input){
-        Book result = bookService.add(input);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/books/{id}").buildAndExpand(result.getId()).toUri();
-        return ResponseEntity.created(location).build();
+    ResponseEntity<?> addBook(@Valid @RequestBody Book input, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        } else {
+            Book result = bookService.add(input);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/books/{id}").buildAndExpand(result.getId()).toUri();
+            return ResponseEntity.created(location).build();
+        }
     }
 
     @DeleteMapping("/{id}")

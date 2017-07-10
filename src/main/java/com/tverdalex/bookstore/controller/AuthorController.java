@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
@@ -32,7 +33,7 @@ public class AuthorController {
     }
 
     @PostMapping
-    ResponseEntity<?> addAuthor(@RequestBody Author author){
+    ResponseEntity<?> addAuthor(@Valid @RequestBody Author author){
         Author result = authorService.add(author);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/authors/{id}").buildAndExpand(result.getId()).toUri();
         return ResponseEntity.created(location).build();
