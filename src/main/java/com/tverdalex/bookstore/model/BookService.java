@@ -39,4 +39,19 @@ public class BookService {
     public boolean exists(Long id){
         return bookRepository.exists(id);
     }
+
+    public Book editBook(Long id, Book book){
+        if(exists(id)){
+            Book existedBook = bookRepository.getOne(id);
+            existedBook.setTitle(book.getTitle());
+            existedBook.setDescription(book.getDescription());
+            existedBook.setGenre(book.getGenre());
+            existedBook.setAuthor(book.getAuthor());
+            existedBook.setPrice(book.getPrice());
+            bookRepository.save(existedBook);
+            return null;
+        } else {
+            return bookRepository.save(book);
+        }
+    }
 }

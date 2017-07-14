@@ -6,6 +6,7 @@ import com.tverdalex.bookstore.repository.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -64,5 +65,21 @@ public class BookController{
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/{id}")
+    ResponseEntity<?> editBook(@PathVariable Long id, @Valid @RequestBody Book book, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        } else {
+            Book result = bookService.editBook(id, book);
+            if(result != null){
+                URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/books/{id}").buildAndExpand(result.getId()).toUri();
+                return ResponseEntity.created(location).build();
+            } else {
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        }
+    }
+
 
 }

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+	<title>Admin Page</title>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="admin.html">Admin Page</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container" style="margin-top:60px">
+	<h1>Edit Book</h1>
+	<form id="editBookForm">
+		<input type="hidden" name="id" id="id"> 
+		<div class="form-group">
+			<label for="title">Title:</label>
+			<input type="text" name="title" class="form-control" id="title">
+		</div>
+		<div class="form-group">
+			<label for="description">Description:</label>
+			<textarea name="description" class="form-control" rows="5" id="description"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="author">Author(s):</label>
+			<div class="row">
+				<div class="col-sm-6">
+					<select multiple name="author" class="form-control" id="author"></select>
+				    <script type="text/javascript">
+				    	$.ajax({
+							url: "http://localhost:8080/authors"			
+						}).then(function(data){
+							$.each(data, function(key, value){
+								$("#author").append(
+									"<option value='" + value.id + "'>" + value.name + "</option>"
+								);
+							});
+						});
+				    </script>
+				</div>
+				<div class="col-sm-6">
+					<div class="input-group">
+						<input type="text" class="form-control" id="newAuthorName">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" onclick='addAuthor()'>Add Author</button>
+						</span>
+					</div>				
+				</div>				
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="author">Genge(s):</label>
+			<div class="row">
+				<div class="col-sm-6">
+					<select multiple name="genre" class="form-control" id="genre"></select>
+				    <script type="text/javascript">
+				    	$.ajax({
+							url: "http://localhost:8080/genres"			
+						}).then(function(data){
+							$.each(data, function(key, value){
+								$("#genre").append(
+									"<option value='" + value.id + "'>" + value.name + "</option>"
+								);
+							});
+						});
+
+				    </script>
+				</div>
+				<div class="col-sm-6">
+					<div class="input-group">
+						<input type="text" class="form-control" id="newGenreName">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" onclick='addGenre()'>Add Genre</button>
+						</span>
+					</div>				
+				</div>				
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="price">Price:</label>
+			<input name="price" class="form-control" id="price">
+		</div>
+		<button type="submit" class="btn btn-default">Edit Book</button>
+	</form>
+</div>
+
+<script type="text/javascript">
+	window.onload = function(){		
+		var url = new URL(window.location.href);	
+		var id = url.searchParams.get("id");
+		$.ajax({
+			url: "http://localhost:8080/books/" + id
+		}).then(function(data){
+			console.log(data);
+			$("#id").attr("value", data.id);
+			$("#title").attr("value", data.title);
+			$("#description").append(data.description);
+			$("#price").attr("value", data.price);
+			var authors = data.author;
+			$.each(authors, function(key,value){
+				$("#author option[value="+value.id+"]").attr("selected", "selected");
+			});
+			var genres = data.genre;
+			$.each(genres, function(key,value){
+				$("#genre option[value="+value.id+"]").attr("selected", "selected");
+			});
+		});
+	}
+
+	$("#editBookForm").submit(function(event){
+		event.preventDefault();
+
+		var array = $(this).serializeArray();
+		console.log(array);
+
+		var book = {};
+		var author = [];
+		var genre = [];
+		$.each(array, function(){
+			if(this.name == 'author'){
+				var item = {};
+				item.id = this.value;
+				author.push(item);
+			} else if (this.name == 'genre') {
+				var item = {};
+				item.id = this.value;
+				genre.push(item);
+			} else{
+				book[this.name] = this.value;
+			}			
+		});
+		if(author.length > 0){
+			book.author = author;
+		}
+		if (genre.length > 0){
+			book.genre = genre;
+		};
+		var id = book.id;
+		book = JSON.stringify(book);
+		console.log(book);
+		$.ajax({
+			url: "http://localhost:8080/books/" + id,
+			method: "PUT",
+			data: book,
+			contentType: "application/json"
+		}).then(function(data){
+			location.replace("admin.html");
+		});
+	});
+
+
+	function addAuthor(){
+		var author = {};
+		author.name = $("#newAuthorName").val();
+		author = JSON.stringify(author);
+		console.log(author);
+		$.ajax({
+			url: "http://localhost:8080/authors/",
+			method: "POST",
+			data: author,
+			contentType: "application/json"
+		}).then(function(){
+			location.reload();
+		});
+	}
+
+	function addGenre(){
+		var genre = {};
+		genre.name = $("#newGenreName").val();
+		genre = JSON.stringify(genre);
+		console.log(genre);
+		$.ajax({
+			url: "http://localhost:8080/genres/",
+			method: "POST",
+			data: genre,
+			contentType: "application/json"
+		}).then(function(){
+			location.reload();
+		});
+	}
+</script>
+</body>
+</html>
